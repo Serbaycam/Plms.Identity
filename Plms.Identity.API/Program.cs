@@ -4,6 +4,9 @@ using Plms.Identity.Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Plms.Identity.Domain.Entities;
+using Plms.Identity.Persistence.Seeds;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,5 +66,26 @@ app.UseAuthorization();
 
 // Controller'larý endpoint olarak haritala
 app.MapControllers();
+// --- SEEDING BAÞLANGICI ---
+using (var scope = app.Services.CreateScope())
+{
+  var services = scope.ServiceProvider;
+  try
+  {
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
 
+    // Rolleri Ekle
+    await ContextSeed.SeedRolesAsync(userManager, roleManager);
+
+    // Admini Ekle
+    await ContextSeed.SeedSuperAdminAsync(userManager, roleManager);
+  }
+  catch (Exception ex)
+  {
+    // Loglama yapabilirsin
+    Console.WriteLine("Seeding sýrasýnda hata oluþtu: " + ex.Message);
+  }
+}
+// --- SEEDING BÝTÝÞÝ ---
 app.Run();

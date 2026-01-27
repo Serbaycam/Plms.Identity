@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Plms.Identity.Application.Wrappers;
 using Plms.Identity.Domain.Entities;
+using Plms.Identity.Domain.Enums;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace Plms.Identity.Application.Features.Auth.Commands.Register
         response.Errors = errors;
         return response;
       }
-
+      await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
       return new ServiceResponse<string>(user.Id.ToString(), "Kullanıcı başarıyla oluşturuldu.");
     }
   }
