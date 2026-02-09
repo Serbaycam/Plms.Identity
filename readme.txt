@@ -13,8 +13,6 @@ To apply the latest Entity Framework migrations and update the databases, follow
 # For Identity API (Users, Roles, Permissions):
 dotnet ef database update --project AuthServer.Identity.API
 
-# For Laboratory API (Test Modules, Samples):
-dotnet ef database update --project AuthServer.Laboratory.API
 
 --------------------------------------------------------------------------------
 
@@ -29,8 +27,6 @@ En son Entity Framework migrasyonlarýný uygulamak ve veritabanlarýný güncellemek
 # Identity API için (Kullanýcýlar, Roller, Yetkiler):
 dotnet ef database update --project AuthServer.Identity.API
 
-# Laboratory API için (Test Modülleri, Numuneler):
-dotnet ef database update --project AuthServer.Laboratory.API
 
 ================================================================================
 NOTE / NOT:

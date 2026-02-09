@@ -13,16 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Identity.Infrast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Identity.API", "AuthServer.Identity.API\AuthServer.Identity.API.csproj", "{0DCBEF86-B8B5-4185-9C0F-409FFE3DE7C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Gateway", "AuthServer.Gateway\AuthServer.Gateway.csproj", "{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Laboratory.API", "AuthServer.Laboratory.API\AuthServer.Laboratory.API.csproj", "{82324B7B-8165-43F8-BFF7-D899914F67E6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{26372C3A-A655-4574-BFAA-80649D533D5C}"
 	ProjectSection(SolutionItems) = preProject
 		readme.txt = readme.txt
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Web", "AuthServer.Web\AuthServer.Web.csproj", "{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,42 +88,6 @@ Global
 		{0DCBEF86-B8B5-4185-9C0F-409FFE3DE7C1}.Release|x64.Build.0 = Release|Any CPU
 		{0DCBEF86-B8B5-4185-9C0F-409FFE3DE7C1}.Release|x86.ActiveCfg = Release|Any CPU
 		{0DCBEF86-B8B5-4185-9C0F-409FFE3DE7C1}.Release|x86.Build.0 = Release|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Debug|x64.Build.0 = Debug|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Debug|x86.Build.0 = Debug|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Release|x64.ActiveCfg = Release|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Release|x64.Build.0 = Release|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Release|x86.ActiveCfg = Release|Any CPU
-		{0BC666AA-F6FA-40B5-BB7C-EC1E43A2BB10}.Release|x86.Build.0 = Release|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Debug|x64.Build.0 = Debug|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Debug|x86.Build.0 = Debug|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Release|x64.ActiveCfg = Release|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Release|x64.Build.0 = Release|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Release|x86.ActiveCfg = Release|Any CPU
-		{82324B7B-8165-43F8-BFF7-D899914F67E6}.Release|x86.Build.0 = Release|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Debug|x64.Build.0 = Debug|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Debug|x86.Build.0 = Debug|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Release|x64.ActiveCfg = Release|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Release|x64.Build.0 = Release|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Release|x86.ActiveCfg = Release|Any CPU
-		{42FDA97E-E4C0-46DA-B2B9-14046CFD252C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
