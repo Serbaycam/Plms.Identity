@@ -27,7 +27,8 @@ namespace AuthServer.Identity.Application.Features.Auth.Commands.Login
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null) return new ServiceResponse<TokenDto>("Kullanıcı bulunamadı.");
-
+            if (!user.IsActive)
+                return new ServiceResponse<TokenDto>("Hesabınız dondurulmuştur. Lütfen yönetici ile iletişime geçin.");
             var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!signInResult.Succeeded) return new ServiceResponse<TokenDto>("Email veya şifre hatalı.");
 

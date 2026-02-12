@@ -16,7 +16,7 @@ namespace AuthServer.Identity.Domain.Entities
         public string? RevokedByIp { get; set; }
         public string? ReplacedByToken { get; set; }
         // ----------------------------------------
-
+        public string? ReasonRevoked { get; set; }
         public bool IsActive => RevokedDate == null && !IsExpired;
 
         public Guid UserId { get; set; }

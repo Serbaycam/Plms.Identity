@@ -17,6 +17,7 @@ namespace AuthServer.Identity.Infrastructure
             // Interface ve Implementation'ı eşleştiriyoruz
             services.AddTransient<ITokenService, TokenService>();
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.AddSingleton<IAuditService, AuditService>();
         }
     }
 }

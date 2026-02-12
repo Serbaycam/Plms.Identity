@@ -16,6 +16,7 @@ namespace AuthServer.Identity.Persistence.Context
         // Domain'deki entity'leri DbSet olarak ekliyoruz
         // (Identity tabloları zaten IdentityDbContext içinde var, onları yazmana gerek yok)
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

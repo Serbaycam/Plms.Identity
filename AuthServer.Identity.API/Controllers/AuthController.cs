@@ -1,9 +1,7 @@
 ﻿using AuthServer.Identity.Application.Features.Auth.Commands.Login;
 using AuthServer.Identity.Application.Features.Auth.Commands.RefreshToken;
-using AuthServer.Identity.Application.Features.Auth.Commands.Register;
 using AuthServer.Identity.Application.Features.Auth.Commands.Revoke;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthServer.Identity.API.Controllers
@@ -17,21 +15,6 @@ namespace AuthServer.Identity.API.Controllers
         public AuthController(IMediator mediator)
         {
             _mediator = mediator;
-        }
-
-        [Authorize(Roles = "SuperAdmin")]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(CreateUserCommand command)
-        {
-            // İsteği Application katmanındaki Handler'a gönderir
-            var response = await _mediator.Send(command);
-
-            if (response.Succeeded)
-            {
-                return Ok(response);
-            }
-
-            return BadRequest(response);
         }
 
         [HttpPost("login")]
