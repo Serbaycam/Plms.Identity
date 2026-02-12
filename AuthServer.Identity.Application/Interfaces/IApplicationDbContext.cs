@@ -6,6 +6,7 @@ namespace AuthServer.Identity.Application.Interfaces
     public interface IApplicationDbContext
     {
         DbSet<RefreshToken> RefreshTokens { get; }
+        DbSet<AuditLog> AuditLogs { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

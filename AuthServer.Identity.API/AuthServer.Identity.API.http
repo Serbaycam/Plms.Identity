@@ -18,7 +18,7 @@ Content-Type: application/json
 
 # Login isteðinden dönen "accessToken" deðerini buraya yapýþtýrýn.
 # Diðer tüm istekler bu deðiþkeni kullanacak.
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNDQ4NGNmYi1kYzAyLTQ2N2YtYzc5Ni0wOGRlNmEyZmU1MjciLCJlbWFpbCI6InN1cGVyYWRtaW5AQXV0aFNlcnZlci5sb2NhbCIsImp0aSI6ImE0Y2U2MzUxLWVkZjItNGJmOC05NGFmLTYwNWYyYmI4MzZmMyIsImZ1bGxOYW1lIjoiYWRtaW4gc3VwZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJTdXBlckFkbWluIiwiZXhwIjoxNzcwODk5Mzc5LCJpc3MiOiJBdXRoU2VydmVyIiwiYXVkIjoiQXV0aFNlcnZlci5DbGllbnRzIn0.zD4TnGYJ6nyWRe9SjhXTzbwTULCBHqfacDGd85whaGo
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNDQ4NGNmYi1kYzAyLTQ2N2YtYzc5Ni0wOGRlNmEyZmU1MjciLCJlbWFpbCI6InN1cGVyYWRtaW5AQXV0aFNlcnZlci5sb2NhbCIsImp0aSI6Ijk5ZThmZTA3LTFhZjQtNDhkZS1hNTUwLTA0Yjk4ZjkyMjhkYyIsImZ1bGxOYW1lIjoiYWRtaW4gc3VwZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiU3VwZXJBZG1pbiIsIkxhYk1hbmFnZXIiXSwiZXhwIjoxNzcwOTAwNjE5LCJpc3MiOiJBdXRoU2VydmVyIiwiYXVkIjoiQXV0aFNlcnZlci5DbGllbnRzIn0.no4JdNjYDAPjOOMtFM9Q4Rw8bxdVAKIHlqQYrr9IXxo
 
 # @name RefreshToken
 POST {{AuthServer.Identity.API_HostAddress}}/api/auth/refresh-token
@@ -104,16 +104,7 @@ Accept: application/json
 
 ###
 
-# Rol Yetkilerini Güncelle
-# Rol ID'sini veritabanýndan veya listeden bulup buraya yaz.
-POST {{AuthServer.Identity.API_HostAddress}}/api/RoleManagement/update-permissions
-Authorization: Bearer {{token}}
-Content-Type: application/json
 
-{
-  "roleId": "ROLE-GUID-BURAYA",
-  "permissions": [
-    "Permissions.Laboratories.View",
-    "Permissions.Laboratories.Create"
-  ]
-}
+GET {{AuthServer.Identity.API_HostAddress}}/api/Dashboard/stats
+Authorization: Bearer {{token}}
+Accept: application/json

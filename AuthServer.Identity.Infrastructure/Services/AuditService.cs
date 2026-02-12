@@ -31,8 +31,7 @@ namespace AuthServer.Identity.Infrastructure.Services
                 CreatedDate = DateTime.UtcNow // BaseEntity'den geliyor
             };
 
-            // Not: Context içine AuditLogs DbSet'ini eklediğinden emin ol
-            // context.AuditLogs.Add(log); 
+            context.AuditLogs.Add(log);
             await context.SaveChangesAsync(default);
         }
     }

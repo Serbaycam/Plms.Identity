@@ -13,22 +13,25 @@ namespace AuthServer.Identity.Application.Features.Auth.Commands.Login
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IApplicationDbContext _context;
+        private readonly IAuditService _auditService; // <--- 1. Eklendi
 
-        public LoginCommandHandler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IApplicationDbContext context)
+        public LoginCommandHandler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IApplicationDbContext context, IAuditService auditService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
-            _context = context; // Inject ettik
+            _context = context;
+            _auditService = auditService; // <--- 2. Inject edildi
         }
 
         public async Task<ServiceResponse<TokenDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
-
             if (user == null) return new ServiceResponse<TokenDto>("Kullanıcı bulunamadı.");
-            if (!user.IsActive)
-                return new ServiceResponse<TokenDto>("Hesabınız dondurulmuştur. Lütfen yönetici ile iletişime geçin.");
+
+            // Kullanıcı Pasif ise Girişi Engelle (Bunu da ekleyelim tam olsun)
+            if (!user.IsActive) return new ServiceResponse<TokenDto>("Hesabınız pasif durumdadır.");
+
             var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!signInResult.Succeeded) return new ServiceResponse<TokenDto>("Email veya şifre hatalı.");
 
@@ -42,15 +45,25 @@ namespace AuthServer.Identity.Application.Features.Auth.Commands.Login
             {
                 Token = tokenDto.RefreshToken,
                 Expires = tokenDto.RefreshTokenExpiration,
-                CreatedByIp = request.IpAddress, // IP Adresi
+                CreatedByIp = request.IpAddress,
                 CreatedDate = DateTime.UtcNow,
                 UserId = user.Id
             };
 
             // 3. Veritabanına Kaydet
-            // (Önce kullanıcının eski aktif refresh tokenlarını iptal etmek isteyebilirsin ama şimdilik çoklu oturuma izin verelim)
             _context.RefreshTokens.Add(refreshTokenEntity);
             await _context.SaveChangesAsync(cancellationToken);
+
+            // --- 4. AUDIT LOG EKLEME (BURASI YENİ) ---
+            await _auditService.LogAsync(
+                user.Id.ToString(),       // İşlemi yapan (Login olan kişi)
+                "Login",                  // Aksiyon Adı
+                "AppUser",                // Etkilenen Tablo
+                user.Id.ToString(),       // Kayıt ID
+                new { Email = user.Email, Roles = roles }, // Detay
+                request.IpAddress ?? "Unknown" // IP Adresi
+            );
+            // -----------------------------------------
 
             return new ServiceResponse<TokenDto>(tokenDto, "Giriş başarılı.");
         }
