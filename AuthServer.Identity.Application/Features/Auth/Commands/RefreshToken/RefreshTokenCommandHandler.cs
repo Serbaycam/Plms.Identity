@@ -13,75 +13,62 @@ namespace AuthServer.Identity.Application.Features.Auth.Commands.RefreshToken
         private readonly ITokenService _tokenService;
         private readonly IApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IAuditService _auditService;
 
-        public RefreshTokenCommandHandler(ITokenService tokenService, IApplicationDbContext context, UserManager<AppUser> userManager, IAuditService auditService)
+        public RefreshTokenCommandHandler(ITokenService tokenService, IApplicationDbContext context, UserManager<AppUser> userManager)
         {
             _tokenService = tokenService;
             _context = context;
             _userManager = userManager;
-            _auditService = auditService;
         }
 
         public async Task<ServiceResponse<TokenDto>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            // 1. Veritabanındaki Refresh Token'ı bul (Kullanıcı bilgisiyle beraber - Include)
-            var currentRefreshToken = await _context.RefreshTokens
-                                            .Include(x => x.User)
-                                            .FirstOrDefaultAsync(x => x.Token == request.RefreshToken, cancellationToken);
+            // 1. Gelen Refresh Token'ı veritabanında bul
+            var incomingToken = await _context.RefreshTokens
+                .Include(x => x.User)
+                .SingleOrDefaultAsync(x => x.Token == request.RefreshToken, cancellationToken);
 
-            // 2. Kontroller
-            if (currentRefreshToken == null)
-                return new ServiceResponse<TokenDto>("Token bulunamadı.");
-            // Kullanıcı durumunu kontrol et
-            if (!currentRefreshToken.User.IsActive)
+            // Token yoksa hata dön
+            if (incomingToken == null)
+                return new ServiceResponse<TokenDto>("Geçersiz token.");
+
+            // 2. REUSE DETECTION (Yeniden Kullanım Tespiti - GÜVENLİK)
+            // Eğer bu token daha önce kullanılmışsa (RevokedDate doluysa), 
+            // demek ki birisi eski bir bileti kullanmaya çalışıyor. Bu bir saldırı olabilir!
+            if (incomingToken.RevokedDate != null)
             {
-                return new ServiceResponse<TokenDto>("Hesabınız yönetici tarafından dondurulmuştur.");
-            }
-            if (currentRefreshToken.IsExpired)
-                return new ServiceResponse<TokenDto>("Refresh token'ın süresi dolmuş. Lütfen tekrar giriş yapın.");
-
-
-
-            // 3. Kullanıcıyı al
-            var user = currentRefreshToken.User;
-            if (user == null) return new ServiceResponse<TokenDto>("Kullanıcı bulunamadı.");
-            if (currentRefreshToken.RevokedDate != null)
-            {
-                // SALDIRI TESPİT EDİLDİ: Kullanıcının tüm açık oturumlarını kapatıyoruz
-                var allActiveTokens = await _context.RefreshTokens
-                    .Where(x => x.UserId == user.Id && x.RevokedDate == null)
-                    .ToListAsync(cancellationToken);
-
-                foreach (var t in allActiveTokens)
-                {
-                    t.RevokedDate = DateTime.UtcNow;
-                    t.ReasonRevoked = "Automatic Revocation due to suspected Token Theft";
-                }
-
+                // Saldırganı engellemek için bu zincire ait (bu kullanıcının) TÜM tokenlarını iptal et.
+                await RevokeDescendantRefreshTokens(incomingToken, incomingToken.User, "Attempted reuse of revoked token", cancellationToken);
+                _context.RefreshTokens.Update(incomingToken);
                 await _context.SaveChangesAsync(cancellationToken);
-                await _auditService.LogAsync(
-                    "SYSTEM",
-                    "SecurityRevocation",
-                    "AppUser",
-                    user.Id.ToString(),
-                    new { Reason = "Suspected token theft detected during refresh" },
-                    request.IpAddress ?? "Unknown"
-                );
-                return new ServiceResponse<TokenDto>("Güvenlik ihlali tespit edildi. Tüm oturumlar kapatıldı.");
+
+                return new ServiceResponse<TokenDto>("Güvenlik ihlali: Kullanılmış token tekrar denendi. Tüm oturumlar kapatıldı.");
             }
-            // 4. Yeni Tokenları Üret
+
+            // 3. Standart Kontroller (Süre bitmiş mi?)
+            if (incomingToken.IsExpired)
+            {
+                // Süresi dolmuş ama henüz revoke edilmemişse, revoke et.
+                incomingToken.RevokedDate = DateTime.UtcNow;
+                incomingToken.ReasonRevoked = "Expired";
+                _context.RefreshTokens.Update(incomingToken);
+                await _context.SaveChangesAsync(cancellationToken);
+                return new ServiceResponse<TokenDto>("Oturum süresi dolmuş. Lütfen tekrar giriş yapın.");
+            }
+
+            // 4. Yeni Tokenları Üret (ROTATION BAŞLIYOR)
+            var user = incomingToken.User;
             var roles = await _userManager.GetRolesAsync(user);
             var newTokenDto = await _tokenService.CreateTokenAsync(user, roles);
 
-            // 5. Token Rotation (Eskiyi iptal et, yeniyi kaydet)
+            // 5. ESKİ TOKEN'I İPTAL ET (ÖNEMLİ!)
+            // Artık bu token kullanılamaz, yerine yenisi geçti.
+            incomingToken.RevokedDate = DateTime.UtcNow;
+            incomingToken.RevokedByIp = request.IpAddress;
+            incomingToken.ReasonRevoked = "Replaced by new token";
+            incomingToken.ReplacedByToken = newTokenDto.RefreshToken; // Zinciri kuruyoruz
 
-            // a) Eski tokenı iptal et
-            currentRefreshToken.RevokedDate = DateTime.UtcNow;
-            currentRefreshToken.RevokedByIp = request.IpAddress;
-            currentRefreshToken.ReplacedByToken = newTokenDto.RefreshToken;
-
-            // b) Yeni tokenı oluştur
+            // 6. YENİ TOKEN'I OLUŞTUR
             var newRefreshTokenEntity = new Domain.Entities.RefreshToken
             {
                 Token = newTokenDto.RefreshToken,
@@ -91,13 +78,27 @@ namespace AuthServer.Identity.Application.Features.Auth.Commands.RefreshToken
                 UserId = user.Id
             };
 
-            // c) Veritabanına işle
-            _context.RefreshTokens.Update(currentRefreshToken);
-            _context.RefreshTokens.Add(newRefreshTokenEntity);
+            // 7. Hepsini Kaydet
+            _context.RefreshTokens.Update(incomingToken); // Eskiyi güncelle
+            _context.RefreshTokens.Add(newRefreshTokenEntity); // Yeniyi ekle
 
             await _context.SaveChangesAsync(cancellationToken);
 
             return new ServiceResponse<TokenDto>(newTokenDto, "Token başarıyla yenilendi.");
+        }
+
+        // Yardımcı Metod: Bir hırsızlık durumunda kullanıcının tüm soy ağacını kurutur.
+        private async Task RevokeDescendantRefreshTokens(Domain.Entities.RefreshToken refreshToken, AppUser user, string reason, CancellationToken cancellationToken)
+        {
+            // O kullanıcının henüz revoke edilmemiş tüm tokenlarını bul
+            var activeTokens = _context.RefreshTokens
+                .Where(t => t.UserId == user.Id && t.RevokedDate == null);
+
+            foreach (var token in activeTokens)
+            {
+                token.RevokedDate = DateTime.UtcNow;
+                token.ReasonRevoked = reason;
+            }
         }
     }
 }

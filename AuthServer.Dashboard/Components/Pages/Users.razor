@@ -55,7 +55,6 @@
                                 <th class="ps-4">Kullanıcı</th>
                                 <th>Email</th>
                                 <th>Durum</th>
-                                <th>Kayıt Tarihi</th>
                                 <th class="text-end pe-4">İşlemler</th>
                             </tr>
                         </thead>
@@ -90,7 +89,6 @@
                                                 </label>
                                             </div>
                                         </td>
-                                        <td>@user.CreatedDate.ToLocalTime().ToString("dd.MM.yyyy")</td>
                                         <td class="text-end pe-4">
                                             <button class="btn btn-sm btn-outline-primary me-1" title="Düzenle" @onclick="() => OpenEditModal(user)">
                                                 <i class="bi bi-pencil-square"></i>

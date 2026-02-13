@@ -8,6 +8,5 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsActive { get; set; } // Kullanıcı aktif mi?
-        public DateTime CreatedDate { get; set; }
     }
 }
