@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Login";
+    var returnUrl = (string?)ViewBag.ReturnUrl ?? "/";
+}
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+    <div>
+        <label>Kullanıcı</label>
+        <input name="email" />
+    </div>
+    <div>
+        <label>Şifre</label>
+        <input name="password" type="password" />
+    </div>
+
+    <button type="submit">Giriş</button>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div style="color:red">
+            @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@e.ErrorMessage</div>
+            }
+        </div>
+    }
+</form>
