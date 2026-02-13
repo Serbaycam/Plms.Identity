@@ -1,5 +1,5 @@
 ﻿using AuthServer.Identity.Application.Features.Management.Sessions.Commands.KillSession;
-using AuthServer.Identity.Application.Features.Management.Sessions.Queries;
+using AuthServer.Identity.Application.Features.Management.Sessions.Queries.GetActiveSessions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

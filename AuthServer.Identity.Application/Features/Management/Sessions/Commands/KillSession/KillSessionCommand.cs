@@ -1,8 +1,5 @@
 ﻿using AuthServer.Identity.Application.Wrappers;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace AuthServer.Identity.Application.Features.Management.Sessions.Commands.KillSession

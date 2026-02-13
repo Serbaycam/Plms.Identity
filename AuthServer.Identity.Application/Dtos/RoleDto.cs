@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AuthServer.Identity.Application.Dtos
+﻿namespace AuthServer.Identity.Application.Dtos
 {
     public class RoleDto
     {

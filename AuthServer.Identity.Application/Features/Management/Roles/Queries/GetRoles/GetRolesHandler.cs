@@ -4,9 +4,6 @@ using AuthServer.Identity.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AuthServer.Identity.Application.Features.Management.Roles.Queries.GetRoles
 {

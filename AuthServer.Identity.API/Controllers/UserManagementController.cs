@@ -1,14 +1,14 @@
-﻿using AuthServer.Identity.Application.Features.Management.Users.Commands.AssignRoles;
+﻿using AuthServer.Identity.Application.Features.Auth.Commands.RevokeAll;
+using AuthServer.Identity.Application.Features.Management.Users.Commands.AdminChangePassword;
+using AuthServer.Identity.Application.Features.Management.Users.Commands.AssignRoles;
+using AuthServer.Identity.Application.Features.Management.Users.Commands.CreateUserByAdmin;
+using AuthServer.Identity.Application.Features.Management.Users.Commands.UpdateUser;
 using AuthServer.Identity.Application.Features.Management.Users.Commands.UpdateUserStatus;
 using AuthServer.Identity.Application.Features.Management.Users.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AuthServer.Identity.Application.Features.Management.Users.Commands.AdminChangePassword;
-using AuthServer.Identity.Application.Features.Management.Users.Commands.CreateUserByAdmin;
 using System.Security.Claims;
-using AuthServer.Identity.Application.Features.Management.Users.Commands.UpdateUser;
-using AuthServer.Identity.Application.Features.Auth.Commands.RevokeAll;
 
 namespace AuthServer.Identity.API.Controllers
 {

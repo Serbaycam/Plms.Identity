@@ -4,10 +4,7 @@ using AuthServer.Identity.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 
 namespace AuthServer.Identity.Application.Features.Management.Roles.Commands.UpdateRolePermissions
 {

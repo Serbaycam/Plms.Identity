@@ -1,7 +1,7 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using AuthServer.Identity.Application.Interfaces;
+﻿using AuthServer.Identity.Application.Interfaces;
 using AuthServer.Identity.Application.Wrappers;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthServer.Identity.Application.Features.Auth.Commands.RevokeAll
 {

@@ -2,9 +2,6 @@
 using AuthServer.Identity.Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AuthServer.Identity.Application.Features.Management.Sessions.Commands.KillSession
 {

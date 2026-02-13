@@ -3,11 +3,8 @@ using AuthServer.Identity.Application.Interfaces;
 using AuthServer.Identity.Application.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace AuthServer.Identity.Application.Features.Management.Sessions.Queries
+namespace AuthServer.Identity.Application.Features.Management.Sessions.Queries.GetActiveSessions
 {
     public class GetActiveSessionsHandler : IRequestHandler<GetActiveSessionsQuery, ServiceResponse<List<ActiveSessionDto>>>
     {

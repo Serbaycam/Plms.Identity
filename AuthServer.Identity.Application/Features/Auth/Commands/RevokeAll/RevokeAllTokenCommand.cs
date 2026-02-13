@@ -1,5 +1,5 @@
-﻿using MediatR;
-using AuthServer.Identity.Application.Wrappers;
+﻿using AuthServer.Identity.Application.Wrappers;
+using MediatR;
 
 namespace AuthServer.Identity.Application.Features.Auth.Commands.RevokeAll
 {

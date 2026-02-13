@@ -19,7 +19,8 @@ namespace AuthServer.Identity.API.Middlewares
             // Çünkü adam zaten yeni oturum açmaya çalışıyor.
             var path = context.Request.Path.Value?.ToLower();
             if (path != null && (
-                path.Contains("/api/auth/login")
+                path.Contains("/api/auth/login") ||
+                path.Contains("/api/auth/refresh-token")
                 ))
             {
                 await _next(context);
